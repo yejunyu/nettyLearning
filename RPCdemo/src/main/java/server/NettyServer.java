@@ -55,7 +55,7 @@ public class NettyServer {
             ChannelFuture f = bootstrap.bind(8080).sync();
             CuratorFramework client = ZookeeperFactory.create();
             InetAddress netAddress = InetAddress.getLocalHost();
-            client.create().withMode(CreateMode.EPHEMERAL_SEQUENTIAL).forPath(Constants.SERVER_PATH + netAddress.getHostAddress());
+            client.create().withMode(CreateMode.EPHEMERAL).forPath(Constants.SERVER_PATH + netAddress.getHostAddress());
             f.channel().closeFuture().sync();
         } finally {
             childGroup.shutdownGracefully();
