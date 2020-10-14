@@ -1,4 +1,4 @@
-rootProject.name = 'concurrent'
+rootProject.name = 'nettyLearning'
 include 'EchoServer'
 include 'RPCdemo'
 
