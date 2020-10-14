@@ -1,0 +1,33 @@
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+ext {
+    nettyVersion = '4.1.31.Final'
+    curatorVersion = '4.0.1'
+
+
+    dependencies = [
+            'netty' : "io.netty:netty-all:${nettyVersion}",
+            'curator-framework': "org.apache.curator:curator-framework:${curatorVersion}",
+            'curator-recipes': "org.apache.curator:curator-recipes:${curatorVersion}",
+    ]
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+
+    repositories {
+        maven { url('http://maven.aliyun.com/nexus/content/groups/public/') }
+        mavenCentral()
+    }
+
+
+    sourceCompatibility = 1.8
+
+    dependencies {
+        implementation rootProject.ext.dependencies['netty']
+        implementation rootProject.ext.dependencies['curator-framework']
+        implementation rootProject.ext.dependencies['curator-recipes']
+    }
+}
