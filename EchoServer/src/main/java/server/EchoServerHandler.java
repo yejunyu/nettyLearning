@@ -32,7 +32,7 @@ public class EchoServerHandler extends
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) {
         // 冲刷所有待审消息到远程节点.关闭通道后,操作完成
         ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
                 .addListener(ChannelFutureListener.CLOSE);

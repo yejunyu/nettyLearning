@@ -6,6 +6,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpServerCodec;
 
 import java.net.InetSocketAddress;
 
@@ -36,8 +37,9 @@ public class EchoServer {
                     // 添加Handler到Channel的ChannelPipeline
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline().addLast(new EchoServerHandler());
+                            socketChannel.pipeline().addLast(new HttpServerCodec());
                         }
                     });
             // 绑定服务,sync等待服务器关闭
