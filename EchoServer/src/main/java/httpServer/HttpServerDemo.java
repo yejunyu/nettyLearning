@@ -2,7 +2,6 @@ package httpServer;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
@@ -32,8 +31,7 @@ public class HttpServerDemo {
                     // 指定 channel 为 niochannel
                     .channel(NioServerSocketChannel.class)
                     // worker 线程组要做的处理
-                    .childHandler(new ChannelInitializer<>() {
-                    });
+                    .childHandler(new HelloChannelInitializer());
             // 用同步方法来启动和关闭服务
             ChannelFuture channelFuture = bootstrap.bind(new InetSocketAddress(PORT)).sync();
             channelFuture.channel().closeFuture().sync();
@@ -47,6 +45,7 @@ public class HttpServerDemo {
     }
 
     public static void main(String[] args) {
-
+        HttpServerDemo httpServerDemo = new HttpServerDemo();
+        httpServerDemo.start();
     }
 }

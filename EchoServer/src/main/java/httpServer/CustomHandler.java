@@ -5,9 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpObject;
+import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
 /**
@@ -24,9 +22,9 @@ public class CustomHandler extends SimpleChannelInboundHandler<HttpObject> {
         Channel channel = ctx.channel();
         System.out.println(channel.remoteAddress());
         //
-        ByteBuf buffer = Unpooled.copiedBuffer("hello netty", CharsetUtil.UTF_8);
+        ByteBuf buffer = Unpooled.copiedBuffer("hello netty\n", CharsetUtil.UTF_8);
         // 构建 http 响应
-        FullHttpResponse response = new DefaultFullHttpResponse();
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, buffer);
         // 把数据刷到 client
         channel.writeAndFlush(response);
     }
