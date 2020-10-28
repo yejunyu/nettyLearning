@@ -1,4 +1,4 @@
-package server;
+package demo.server;
 
 import constant.Constants;
 import io.netty.bootstrap.ServerBootstrap;
