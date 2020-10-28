@@ -3,9 +3,12 @@ package demo.server;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpContentCompressor;
+import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 
 import java.net.InetSocketAddress;
@@ -25,11 +28,13 @@ public class EchoServer {
 
     public void start() throws InterruptedException {
         // 创建EventGroup,epoll的基于事件驱动的响应
-        NioEventLoopGroup group = new NioEventLoopGroup();
+        NioEventLoopGroup boss = new NioEventLoopGroup(1);
+        // 默认是 2 倍核数线程
+        NioEventLoopGroup worker = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
             // 创建ServerBootstrap
-            b.group(group)
+            b.group(boss, worker)
                     // 指定NIO使用的Channel
                     .channel(NioServerSocketChannel.class)
                     // 设置socket地址使用的端口
@@ -38,10 +43,18 @@ public class EchoServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
-                            socketChannel.pipeline().addLast(new EchoServerHandler());
-                            socketChannel.pipeline().addLast(new HttpServerCodec());
+                            socketChannel.pipeline()
+                                    // http 编解码
+                                    .addLast("codec", new HttpServerCodec())
+                                    // httpContent 压缩
+                                    .addLast("compressor", new HttpContentCompressor())
+                                    // http 消息聚合 (request,response)
+                                    .addLast("aggregator", new HttpObjectAggregator(65535))
+                                    // 自定义handler
+                                    .addLast(new EchoServerHandler());
                         }
-                    });
+                    })
+                    .childOption(ChannelOption.SO_KEEPALIVE, true);
             // 绑定服务,sync等待服务器关闭
             ChannelFuture f = b.bind().sync();
             System.out.println(EchoServer.class.getName() + " started and listen on " + f.channel().localAddress());
@@ -49,7 +62,8 @@ public class EchoServer {
             f.channel().closeFuture().sync();
         } finally {
             // 关闭EventLoopGroup,释放所有资源
-            group.shutdownGracefully().sync();
+            boss.shutdownGracefully().sync();
+            worker.shutdownGracefully().sync();
         }
 
     }
