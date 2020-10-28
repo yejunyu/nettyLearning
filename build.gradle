@@ -4,12 +4,14 @@ version '1.0-SNAPSHOT'
 ext {
     nettyVersion = '4.1.31.Final'
     curatorVersion = '4.0.1'
+    jolVersion = '0.14'
 
 
     dependencies = [
-            'netty' : "io.netty:netty-all:${nettyVersion}",
+            'netty'            : "io.netty:netty-all:${nettyVersion}",
             'curator-framework': "org.apache.curator:curator-framework:${curatorVersion}",
-            'curator-recipes': "org.apache.curator:curator-recipes:${curatorVersion}",
+            'curator-recipes'  : "org.apache.curator:curator-recipes:${curatorVersion}",
+            'jol'              : "org.openjdk.jol:jol-core: ${jolVersion}"
     ]
 }
 
