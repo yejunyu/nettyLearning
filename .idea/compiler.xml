@@ -2,7 +2,11 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
+      <module name="EchoServer_main" target="1.8" />
+      <module name="EchoServer_test" target="1.8" />
       <module name="RPCdemo" target="1.8" />
+      <module name="RPCdemo_main" target="1.8" />
+      <module name="RPCdemo_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
