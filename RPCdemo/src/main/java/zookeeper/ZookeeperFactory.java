@@ -25,8 +25,10 @@ public class ZookeeperFactory {
     }
 
     public static void main(String[] args) throws Exception {
-//        CuratorFramework demo.client = create();
-//        demo.client.create().forPath("/netty");
+        CuratorFramework client = create();
+//        client.create().forPath("/netty");
         System.out.println(InetAddress.getLocalHost().getHostAddress());
+        byte[] bytes = client.getData().forPath("/netty");
+        System.out.println(new String(bytes));
     }
 }

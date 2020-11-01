@@ -53,6 +53,7 @@ public class NettyServer {
                         }
                     });
             ChannelFuture f = bootstrap.bind(8080).sync();
+            // 本机地址注册到 zk
             CuratorFramework client = ZookeeperFactory.create();
             InetAddress netAddress = InetAddress.getLocalHost();
             client.create().withMode(CreateMode.EPHEMERAL).forPath(Constants.SERVER_PATH + netAddress.getHostAddress());
