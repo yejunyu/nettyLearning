@@ -7,6 +7,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * @author: YeJunyu
@@ -24,6 +25,12 @@ public class WSServerInitialzer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new ChunkedWriteHandler());
         // httpObject 聚合器,聚合成 fullhttpReqest或 fullhttpResponse
         pipeline.addLast(new HttpObjectAggregator(1024 * 64));
+
+        // ============= 增加心跳支持 ==================
+        // 激活设置读写空闲状态配置
+        pipeline.addLast(new IdleStateHandler(60, 60, 60));
+        pipeline.addLast(new HeartBeatHandler());
+
         // =============以上是用于支持 http 协议(因为 ws是基于 http),下面是 ws 的支持===============
 
         // ws 协议支持用于指定客户端访问的路由

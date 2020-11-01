@@ -1,4 +1,3 @@
 rootProject.name = 'nettyLearning'
 include 'EchoServer'
 include 'RPCdemo'
-
