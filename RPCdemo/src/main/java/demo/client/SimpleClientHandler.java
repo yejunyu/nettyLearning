@@ -1,17 +1,18 @@
-package demo.server;
+package demo.client;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.AttributeKey;
 
 /**
  * @author: yejunyu
  * date: 2018/11/20
  */
-public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
+public class SimpleClientHandler extends ChannelInboundHandlerAdapter {
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ctx.channel().writeAndFlush("is ok\r\n");
-        System.out.println("ok");
-        ctx.close();
+        System.out.println(msg.toString());
+        ctx.channel().attr(AttributeKey.valueOf("abc")).set("attr");
     }
 }

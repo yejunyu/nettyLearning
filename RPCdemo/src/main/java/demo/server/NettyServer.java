@@ -12,6 +12,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.AttributeKey;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
 import zookeeper.ZookeeperFactory;
@@ -45,19 +47,23 @@ public class NettyServer {
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             // 解码器,长度65535,设置分隔符
                             socketChannel.pipeline()
-                                    .addLast(new DelimiterBasedFrameDecoder(65535, Delimiters.lineDelimiter()))
+                                    .addLast(new DelimiterBasedFrameDecoder(65535, Delimiters.lineDelimiter()[0]))
                                     // rpc二进制流转字符串
                                     .addLast(new StringDecoder())
                                     .addLast(new SimpleServerHandler())
-                                    .addLast(new StringDecoder());
+                                    .addLast(new StringEncoder());
                         }
                     });
             ChannelFuture f = bootstrap.bind(8080).sync();
             // 本机地址注册到 zk
             CuratorFramework client = ZookeeperFactory.create();
             InetAddress netAddress = InetAddress.getLocalHost();
-            client.create().withMode(CreateMode.EPHEMERAL).forPath(Constants.SERVER_PATH + netAddress.getHostAddress());
+            if (client.getData().forPath("/netty") == null) {
+                client.create().withMode(CreateMode.EPHEMERAL).forPath(Constants.SERVER_PATH + netAddress.getHostAddress());
+            }
             f.channel().closeFuture().sync();
+            Object result = f.channel().attr(AttributeKey.valueOf("abc")).get();
+            System.out.println(result);
         } finally {
             childGroup.shutdownGracefully();
             parentGroup.shutdownGracefully();

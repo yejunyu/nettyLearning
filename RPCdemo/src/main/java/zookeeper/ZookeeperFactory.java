@@ -26,7 +26,7 @@ public class ZookeeperFactory {
 
     public static void main(String[] args) throws Exception {
         CuratorFramework client = create();
-//        client.create().forPath("/netty");
+        client.create().forPath("/netty");
         System.out.println(InetAddress.getLocalHost().getHostAddress());
         byte[] bytes = client.getData().forPath("/netty");
         System.out.println(new String(bytes));
