@@ -25,6 +25,8 @@ public class CustomHandler extends SimpleChannelInboundHandler<HttpObject> {
         ByteBuf buffer = Unpooled.copiedBuffer("hello netty\n", CharsetUtil.UTF_8);
         // 构建 http 响应
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, buffer);
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");
+        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, buffer.readableBytes());
         // 把数据刷到 demo.client
         channel.writeAndFlush(response);
     }
