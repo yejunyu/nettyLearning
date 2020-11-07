@@ -1,4 +1,4 @@
-package webSocket;
+package webSocket.server;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

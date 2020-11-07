@@ -1,9 +1,11 @@
-package webSocket;
+package webSocket.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 
 import java.net.InetSocketAddress;
 
@@ -30,6 +32,7 @@ public class WebSocketServerDemo {
             bootstrap.group(bossGroup, workGroup)
                     // 指定 channel 为 niochannel
                     .channel(NioServerSocketChannel.class)
+                    .childHandler(new LoggingHandler(LogLevel.INFO))
                     // worker 线程组要做的处理
                     // 所有 handler 聚集的初始化器
                     .childHandler(new WSServerInitialzer());
