@@ -6,13 +6,16 @@ ext {
     // 对应 3.4 版本的 zk
     curatorVersion = '2.4.2'
     jolVersion = '0.14'
+    protocVersion = '3.13.0'
 
 
     dependencies = [
             'netty'            : "io.netty:netty-all:${nettyVersion}",
             'curator-framework': "org.apache.curator:curator-framework:${curatorVersion}",
             'curator-recipes'  : "org.apache.curator:curator-recipes:${curatorVersion}",
-            'jol'              : "org.openjdk.jol:jol-core: ${jolVersion}"
+            'jol'              : "org.openjdk.jol:jol-core: ${jolVersion}",
+            'protoc-java'      : "com.google.protobuf:protobuf-java: ${protocVersion}",
+            'protoc-util'      : "com.google.protobuf:protobuf-java-util: ${protocVersion}"
     ]
 }
 

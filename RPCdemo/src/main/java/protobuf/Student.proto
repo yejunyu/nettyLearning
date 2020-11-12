@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package com.yejunyu.protobuf;
+
+option optimize_for = SPEED;
+option java_package = "com.yejunyu.protobuf";
+option java_outer_classname = "DataInfo";
+
+message Student{
+    required string name=1;
+    optional int32 age=2;
+    optional string address=3;
+    repeated PhoneNumber phone=4;
+
+    enum PhoneType {
+        MOBILE = 0;
+        HOME = 1;
+        WORK = 2;
+     }
+
+    message PhoneNumber {
+        optional string number = 1;
+        optional PhoneType type = 2 [default = HOME];
+    }
+
+}
