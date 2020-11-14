@@ -37,3 +37,10 @@ subprojects {
         compile rootProject.ext.dependencies['curator-recipes']
     }
 }
+
+// 执行 gradle wrapper1 命令指定 gradlew 版本
+// gradlew 和 gradle 命令一样
+task wrapper1(type: Wrapper) {
+    gradleVersion = '4.7'
+    distributionType = 'all'
+}
