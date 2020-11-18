@@ -2,8 +2,11 @@ package nioTest;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.SecureRandom;
 
@@ -103,8 +106,27 @@ public class NioTest {
         outStream.close();
     }
 
+    /**
+     * 内存映射文件例子
+     *
+     * @throws IOException
+     */
+    static void test5() throws IOException {
+        // 创建一个能读能写的文件
+        RandomAccessFile file = new RandomAccessFile("test1.txt", "rw");
+        FileChannel channel = file.getChannel();
+        // 文件锁 true 代表共享锁,false 排它锁
+//        FileLock lock = channel.lock(3, 6, true);
+//        lock.release();
+        MappedByteBuffer mapFile = channel.map(FileChannel.MapMode.READ_WRITE, 0, 10);
+        mapFile.put(0, (byte) 'w');
+        mapFile.put(3, (byte) 'a');
+        // 内存映射文件修改文件,这里是堆外内存
+        // idea 里看不出来,终端里 cat 会发现文件的内容以及更改了
+        file.close();
+    }
 
     public static void main(String[] args) throws Exception {
-        test4();
+        test5();
     }
 }
