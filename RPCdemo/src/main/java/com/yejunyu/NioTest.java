@@ -1,6 +1,8 @@
 package com.yejunyu;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
 
 /**
  * @author: YeJunyu
@@ -10,12 +12,19 @@ import java.io.FileNotFoundException;
  */
 public class NioTest {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         // 多个 port
-
+        int[] ports = new int[]{
+                5000, 5001, 5002, 5003, 5004
+        };
         // selector
-
+        Selector selector = Selector.open();
         // channel 注册到 selector 上,selector 关注 accept 事件
+        for (int i = 0; i < ports.length; i++) {
+            ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+
+        }
+
 
         // 循环接收 selector 事件
 
