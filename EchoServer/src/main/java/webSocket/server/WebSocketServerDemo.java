@@ -1,7 +1,9 @@
 package webSocket.server;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
@@ -35,7 +37,8 @@ public class WebSocketServerDemo {
                     .childHandler(new LoggingHandler(LogLevel.INFO))
                     // worker 线程组要做的处理
                     // 所有 handler 聚集的初始化器
-                    .childHandler(new WSServerInitialzer());
+                    .childHandler(new WSServerInitialzer())
+                    .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
             // 用同步方法来启动和关闭服务
             ChannelFuture channelFuture = bootstrap.bind(new InetSocketAddress(PORT)).sync();
             channelFuture.channel().closeFuture().sync();
