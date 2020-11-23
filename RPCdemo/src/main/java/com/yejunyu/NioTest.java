@@ -27,13 +27,13 @@ public class NioTest {
         // selector
         Selector selector = Selector.open();
         // channel 注册到 selector 上,selector 关注 accept 事件
-        for (int i = 0; i < ports.length; i++) {
+        for (int port : ports) {
             ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
             // 设为非阻塞
             serverSocketChannel.configureBlocking(false);
             // socket 标准流程
             ServerSocket socket = serverSocketChannel.socket();
-            socket.bind(new InetSocketAddress(ports[i]));
+            socket.bind(new InetSocketAddress(port));
             // socket 绑定好之后需要把 channel注册到 selector 上
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
         }
