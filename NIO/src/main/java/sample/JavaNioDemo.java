@@ -1,4 +1,4 @@
-package com.yejunyu;
+package sample;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -17,7 +17,7 @@ import java.util.Set;
  * @email: yyyejunyu@gmail.com
  * @date: 2020/11/18
  */
-public class NioTest {
+public class JavaNioDemo {
 
     public static void main(String[] args) throws IOException {
         // 多个 port
