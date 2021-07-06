@@ -116,6 +116,7 @@ public class NioTest {
         RandomAccessFile file = new RandomAccessFile("test1.txt", "rw");
         FileChannel channel = file.getChannel();
         // 文件锁 true 代表共享锁,false 排它锁
+        // 共享锁可以读文件, 排它锁写文件
 //        FileLock lock = channel.lock(3, 6, true);
 //        lock.release();
         MappedByteBuffer mapFile = channel.map(FileChannel.MapMode.READ_WRITE, 0, 10);
