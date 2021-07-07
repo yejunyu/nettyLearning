@@ -75,6 +75,8 @@ public class NioTest {
         byteBuffer.flip();
         // 写入 fileChannel
         fileChannel.write(byteBuffer);
+        // 强制吧 os cache 的内容刷到磁盘去 (会导致性能下降)
+        fileChannel.force(true);
         outStream.close();
     }
 
@@ -116,7 +118,7 @@ public class NioTest {
         RandomAccessFile file = new RandomAccessFile("test1.txt", "rw");
         FileChannel channel = file.getChannel();
         // 文件锁 true 代表共享锁,false 排它锁
-        // 共享锁可以读文件, 排它锁写文件
+        // 共享锁让大家只能读文件, 排它锁用来读写文件
 //        FileLock lock = channel.lock(3, 6, true);
 //        lock.release();
         MappedByteBuffer mapFile = channel.map(FileChannel.MapMode.READ_WRITE, 0, 10);
