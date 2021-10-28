@@ -15,7 +15,7 @@ import io.netty.util.CharsetUtil;
  */
 
 /**
- * 标识这类的实例之间可以在channel里共享
+ * 标识这类的实例之间可以在channel里共享(保证线程安全)
  */
 @ChannelHandler.Sharable
 public class EchoServerHandler extends
