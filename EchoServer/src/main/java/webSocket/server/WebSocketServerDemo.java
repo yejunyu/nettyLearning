@@ -26,6 +26,8 @@ public class WebSocketServerDemo {
 
 
     public void start() {
+
+
         NioEventLoopGroup bossGroup = new NioEventLoopGroup();
         NioEventLoopGroup workGroup = new NioEventLoopGroup();
         try {
@@ -38,6 +40,17 @@ public class WebSocketServerDemo {
                     // worker 线程组要做的处理
                     // 所有 handler 聚集的初始化器
                     .childHandler(new WSServerInitialzer())
+                    // 就是keepalive, 对应用层没什么用
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
+                    // 让关闭连接释放的端口今早可使用
+                    .childOption(ChannelOption.SO_REUSEADDR, true)
+                    // TCP接收缓冲区的容量上限
+                    .childOption(ChannelOption.SO_RCVBUF, 1048576)
+                    // TCP发送缓冲区的容量上限
+                    .childOption(ChannelOption.SO_SNDBUF, 1048576)
+                    // 握手等待队列和 accept 队列之和
+                    .childOption(ChannelOption.SO_BACKLOG, 1024)
+                    // 开启 netty 的池化内存
                     .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
             // 用同步方法来启动和关闭服务
             ChannelFuture channelFuture = bootstrap.bind(new InetSocketAddress(PORT)).sync();

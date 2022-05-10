@@ -21,7 +21,7 @@ public class WSServerInitialzer extends ChannelInitializer<SocketChannel> {
         ChannelPipeline pipeline = ch.pipeline();
         // webSocket 基于 http 协议,首先需要 http 编解码
         pipeline.addLast(new HttpServerCodec());
-        // pippeline 大数据流传输支持 chunk
+        // pipeline 大数据流传输支持 chunk
         pipeline.addLast(new ChunkedWriteHandler());
         // httpObject 聚合器,聚合成 fullhttpReqest或 fullhttpResponse
         pipeline.addLast(new HttpObjectAggregator(1024 * 64));
