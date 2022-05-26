@@ -2,10 +2,9 @@ package demo.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.CharsetUtil;
 
 /**
@@ -19,23 +18,23 @@ import io.netty.util.CharsetUtil;
  */
 @ChannelHandler.Sharable
 public class EchoServerHandler extends
-        ChannelInboundHandlerAdapter {
+        SimpleChannelInboundHandler<ByteBuf> {
+
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx,
-                            Object msg) {
-        ByteBuf in = (ByteBuf) msg;
+    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
         // 日志消息输出到控制台
-        System.out.println("Server received: " + in.toString(CharsetUtil.UTF_8));
+        System.out.println("Server received: " + msg.toString(CharsetUtil.UTF_8));
         // 将所接手的消息返回给发送者,注意这里还没有冲刷数据
-        ctx.write("hello "+in);
+        ctx.writeAndFlush(msg.toString()+"x");
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         // 冲刷所有待审消息到远程节点.关闭通道后,操作完成
-        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
-                .addListener(ChannelFutureListener.CLOSE);
+        ctx.writeAndFlush(Unpooled.copiedBuffer("hello",CharsetUtil.UTF_8));
+//        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
+//                .addListener(ChannelFutureListener.CLOSE);
     }
 
     @Override

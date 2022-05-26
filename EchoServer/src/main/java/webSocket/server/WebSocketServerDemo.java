@@ -19,7 +19,7 @@ import java.net.InetSocketAddress;
  */
 public class WebSocketServerDemo {
 
-    private final static int PORT = 8080;
+    private final static int PORT = 8888;
 
     public WebSocketServerDemo() {
     }

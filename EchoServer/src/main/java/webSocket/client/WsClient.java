@@ -1,4 +1,4 @@
-package demo.client;
+package webSocket.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -7,25 +7,37 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.http.DefaultHttpHeaders;
+import io.netty.handler.codec.http.HttpClientCodec;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
+import io.netty.handler.codec.http.websocketx.WebSocketClientHandshakerFactory;
+import io.netty.handler.codec.http.websocketx.WebSocketVersion;
+import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketClientCompressionHandler;
 
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * @Author: yejunyu
  * @Date: 2018/11/20
  * @Email: yyyejunyu@gmail.com
  */
-public class EchoClient {
+public class WsClient {
 
     private final String host;
     private final int port;
 
-    public EchoClient(String host, int port) {
+    public WsClient(String host, int port) {
         this.host = host;
         this.port = port;
     }
 
-    public void start() throws InterruptedException {
+    public void start() throws InterruptedException, URISyntaxException {
+        final URI uri = new URI("ws://127.0.0.1:8080/ws");
+        final WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(uri, WebSocketVersion.V13, null, true, new DefaultHttpHeaders());
+        WsClientHandler wsClientHandler = new WsClientHandler(handshaker);
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             // 创建BootStrap
@@ -40,7 +52,11 @@ public class EchoClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new EchoClientHandler());
+                            socketChannel.pipeline().addLast(
+                                    new HttpClientCodec(),
+                                    new HttpObjectAggregator(1024 * 8),
+                                    WebSocketClientCompressionHandler.INSTANCE,
+                                    wsClientHandler);
                         }
                     });
             // 连接远程
@@ -53,9 +69,9 @@ public class EchoClient {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        final String host = "192.168.18.252";
+    public static void main(String[] args) throws InterruptedException, URISyntaxException {
+        final String host = "127.0.0.1";
         final int port = 8080;
-        new EchoClient(host, port).start();
+        new WsClient(host, port).start();
     }
 }

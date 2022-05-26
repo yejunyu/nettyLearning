@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+dependencies {
+
+    compile rootProject.ext.dependencies['netty']
+    implementation rootProject.ext.dependencies['hutool']
+    implementation rootProject.ext.dependencies['json']
+
+}

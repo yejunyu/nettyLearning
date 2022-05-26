@@ -7,9 +7,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpContentCompressor;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
 
 import java.net.InetSocketAddress;
 
@@ -45,11 +42,11 @@ public class EchoServer {
                         protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline()
                                     // http 编解码
-                                    .addLast("codec", new HttpServerCodec())
+//                                    .addLast("codec", new HttpServerCodec())
                                     // httpContent 压缩
-                                    .addLast("compressor", new HttpContentCompressor())
+//                                    .addLast("compressor", new HttpContentCompressor())
                                     // http 消息聚合 (request,response)
-                                    .addLast("aggregator", new HttpObjectAggregator(65535))
+//                                    .addLast("aggregator", new HttpObjectAggregator(65535))
                                     // 自定义handler
                                     .addLast(new EchoServerHandler());
                         }

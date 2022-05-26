@@ -1,4 +1,4 @@
-package webSocket.server;
+package com.yejunyu.bilibili.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -18,11 +18,11 @@ import java.time.LocalDateTime;
 public class ChatHandler
         extends SimpleChannelInboundHandler<TextWebSocketFrame/*专门用来在 ws 中处理文本的对象,frame 是消息载体*/> {
 
+    public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     /**
      * 统一管理 所有client的 channel
      */
-    public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {

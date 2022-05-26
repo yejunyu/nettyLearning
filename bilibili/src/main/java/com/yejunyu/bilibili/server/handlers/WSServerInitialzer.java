@@ -1,5 +1,7 @@
-package webSocket.server;
+package com.yejunyu.bilibili.server.handlers;
 
+import com.yejunyu.bilibili.server.ChatHandler;
+import com.yejunyu.bilibili.server.HeartBeatHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -34,7 +36,7 @@ public class WSServerInitialzer extends ChannelInitializer<SocketChannel> {
         // =============以上是用于支持 http 协议(因为 ws是基于 http),下面是 ws 的支持===============
 
         // ws 协议支持用于指定客户端访问的路由
-        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
+        pipeline.addLast(new WebSocketServerProtocolHandler("/wb"));
         // 自定义 handler
         pipeline.addLast(new ChatHandler());
     }
